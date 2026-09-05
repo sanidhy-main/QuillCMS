@@ -1,4 +1,4 @@
-package com.example.quillcms;
+package com.sanidhy.quillcms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
