@@ -7,7 +7,7 @@ import com.sanidhy.quillcms.entity.Post;
 public class CommentService {
     private final CommentRepository commentRepository;
 
-    CommentService(CommentRepository commentRepository) {
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
@@ -19,7 +19,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public void replyToComment(int commentID, String body) {
+    public void replyToComment(long commentID, String body) {
         Comment comment = new Comment();
         comment.setBody(body);
 
