@@ -49,5 +49,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    //followUser, blockUser - make relationship (user to user -> one to many), and possibly follows and blocks tables
+    public void followUser(User follower, User following) {
+        follower.getFollowingSet().add(following);
+        userRepository.save(follower);
+    }
+
+    public void blockUser(User blocker, User blocking) {
+        blocker.getBlockingSet().add(blocking);
+        userRepository.save(blocker);
+    }
 }

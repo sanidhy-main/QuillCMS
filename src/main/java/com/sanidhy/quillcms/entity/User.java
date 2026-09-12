@@ -7,6 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import java.time.LocalDate;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
@@ -33,6 +38,22 @@ public class User {
 
     @Column(name = "mobile_number")
     private String mobileNumber;
+
+    @ManyToMany
+    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
+    private Set<User> followingSet = new HashSet()<>;
+
+    public Set<User> getFollowingSet() {
+        return this.followingSet;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "blocks", joinColumns = @JoinColumn(name = "blocker_id"), inverseJoinColumns = @JoinColumn(name = "blocked_id"))
+    private Set<User> blockedSet = new HashSet()<>;
+
+    public Set<User> getBlockingSet() {
+        return this.blockedSet;
+    }
 
     public User() {
         isAdmin = false;
