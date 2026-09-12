@@ -1,9 +1,7 @@
 package com.sanidhy.quillcms.service;
 
 import com.sanidhy.quillcms.entity.Post;
-import com.sanidhy.quillcms.entity.User;
 import com.sanidhy.quillcms.repository.PostRepository;
-import com.sanidhy.quillcms.repository.UserRepository;
 
 public class PostService {
     private final PostRepository postRepository;
