@@ -48,4 +48,6 @@ public class UserService {
         //Verify with otp
         userRepository.save(user);
     }
+
+    //followUser, blockUser - make relationship (user to user -> one to many), and possibly follows and blocks tables
 }
