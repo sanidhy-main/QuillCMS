@@ -72,7 +72,7 @@ public class Comment {
         this.post = post;
     }
 
-    public void setParentCommentId(Comment parentComment) {
+    public void setParentComment(Comment parentComment) {
         this.parentComment = parentComment;
     }
 }
