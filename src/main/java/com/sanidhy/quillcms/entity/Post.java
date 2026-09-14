@@ -24,6 +24,10 @@ public class Post {
     @Column(name = "body")
     private String body;
 
+    @ManyToMany
+    @JoinTable(name = "liked_posts", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes = new HashSet<>();
+
     public Post() {}
 
     public User getUser() {
@@ -48,5 +52,9 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
     }
 }

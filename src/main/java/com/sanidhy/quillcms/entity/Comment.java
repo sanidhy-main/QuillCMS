@@ -32,6 +32,10 @@ public class Comment {
     @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
     private Comment parentComment;
 
+    @ManyToMany
+    @JoinTable(name = "liked_posts", joinColumns = @JoinColumn(name = "comment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes = new HashSet<>();
+
     public long getCommentId() {
         return this.id;
     }
@@ -74,5 +78,9 @@ public class Comment {
 
     public void setParentComment(Comment parentComment) {
         this.parentComment = parentComment;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
     }
 }

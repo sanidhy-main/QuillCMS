@@ -29,5 +29,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    //likeComment() -> Probably also needs to be a table (many to many)
+    public void likeComment(Comment comment, User user) {
+        if (!comment.getLikes().contains(user)) {
+            comment.getLikes().add(user);
+        }
+    }
 }

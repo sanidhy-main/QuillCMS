@@ -27,4 +27,9 @@ public class PostService {
         postRepository.save(post);
     }
 
-    //likePost - make relationship (user to post -> one to many), and possibly a likes table
+    public void likePost(Post post, User user) {
+        if (!post.getLikes().contains(user)) {
+            post.getLikes().add(user);
+        }
+    }
+}
