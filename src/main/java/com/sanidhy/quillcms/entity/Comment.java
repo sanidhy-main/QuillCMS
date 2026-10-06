@@ -33,7 +33,7 @@ public class Comment {
     private Comment parentComment;
 
     @ManyToMany
-    @JoinTable(name = "liked_posts", joinColumns = @JoinColumn(name = "comment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "liked_comments", joinColumns = @JoinColumn(name = "comment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes = new HashSet<>();
 
     public long getCommentId() {
