@@ -17,9 +17,6 @@ public class PostResponseDTO {
     public void setBody(String body) {
             this.body = body;
     }
-    public void setUser(User user) {
-            this.user = user;
-    }
     public int getLikes() {
             return likes;
     }

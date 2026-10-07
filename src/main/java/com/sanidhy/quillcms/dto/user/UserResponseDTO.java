@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 public class UserResponseDTO {
-    private int id;
+    private long id;
     private String username;
     private String bio;
     private LocalDate dob;
@@ -30,7 +30,7 @@ public class UserResponseDTO {
         this.mobileNumber = mobile;
     }
 
-    private int getId() {
+    public long getId() {
         return this.id;
     }
     public String getUsername() {
