@@ -5,7 +5,7 @@ import com.sanidhy.quillcms.entity.User;
 public class PostResponseDTO {
     private long id;
     private String body;
-    private Set<User> likes = new HashSet<>();
+    private int likes;
 
     public long getId() {
             return this.id;
@@ -20,7 +20,7 @@ public class PostResponseDTO {
     public void setUser(User user) {
             this.user = user;
     }
-    public Set<User> getLikes() {
+    public int getLikes() {
             return likes;
     }
 }
