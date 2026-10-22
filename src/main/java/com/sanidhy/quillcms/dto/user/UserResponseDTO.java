@@ -14,6 +14,9 @@ public class UserResponseDTO {
     private Set<UserResponseDTO> followingSet = new HashSet()<>;
     private Set<UserResponseDTO> blockedSet = new HashSet()<>;
 
+    public void setId(long id) {
+        this.id = id;
+    }
     public void setUsername(String username) {
         this.username = username;
     }
@@ -22,6 +25,9 @@ public class UserResponseDTO {
     }
     public void setDOB(int year, int month, int day) {
         this.dob = LocalDate.of(year, month, day);
+    }
+    public void setDOB(LocalDate dob) {
+        this.dob = dob;
     }
     public void setEmail(String email) {
         this.email = email;
