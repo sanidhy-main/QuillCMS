@@ -22,4 +22,10 @@ public class CommentResponseDTO {
     public void setBody(String body) {
         this.body = body;
     }
+    public void setCommentId(long id) {
+        this.id = id;
+    }
+    public int setLikes() {
+        this.likes = likes;
+    }
 }
