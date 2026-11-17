@@ -12,6 +12,10 @@ import com.sanidhy.quillcms.exception.UserNotFoundException;
 import com.sanidhy.quillcms.dto.user.UpdateUserDTO;
 import org.springframework.transaction.annotation.Transactional;
 import com.sanidhy.quillcms.exception.AlreadyFollowingException;
+import com.sanidhy.quillcms.exception.InvalidUserDataException;
+import com.sanidhy.quillcms.exception.NotFollowingException;
+import com.sanidhy.quillcms.exception.AlreadyBlockedException;
+import com.sanidhy.quillcms.exception.NotBlockedException;
 
 @Service
 @Transactional
@@ -78,12 +82,12 @@ public class UserService {
     }
 
     public void followUser(User follower, User following) {
-        if (follower.getFollowingSet().contains(following)) {
-            throw new AlreadyFollowingException("Already following this user");
-        }
-
         if (follower.equals(following)) {
             throw new InvalidUserDataException("Cannot follow yourself");
+        }
+
+        if (follower.getFollowingSet().contains(following)) {
+            throw new AlreadyFollowingException("Already following this user");
         }
 
         follower.getFollowingSet().add(following);
@@ -100,12 +104,12 @@ public class UserService {
     }
 
     public void blockUser(User blocker, User blocking) {
-        if (blocker.getBlockingSet().contains(blocking)) {
-            throw new AlreadyBlockedException("Already blocking this user");
-        }
-
         if (blocker.equals(blocking)) {
             throw new InvalidUserDataException("Cannot block yourself");
+        }
+
+        if (blocker.getBlockingSet().contains(blocking)) {
+            throw new AlreadyBlockedException("Already blocking this user");
         }
 
         blocker.getBlockingSet().add(blocking);
