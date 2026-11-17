@@ -69,6 +69,13 @@ public class UserService {
         return userMapper.toResponseDTO(updatedUser);
     }
 
+    public void deleteUser(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userRepository.delete(user);
+    }
+
     public void followUser(User follower, User following) {
         follower.getFollowingSet().add(following);
         userRepository.save(follower);

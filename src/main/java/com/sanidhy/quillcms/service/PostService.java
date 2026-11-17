@@ -53,4 +53,11 @@ public class PostService {
         post.getLikes().add(user);
         postRepository.save(post);
     }
+
+    public void deletePost(long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post not found"));
+
+        postRepository.delete(post);
+    }
 }
