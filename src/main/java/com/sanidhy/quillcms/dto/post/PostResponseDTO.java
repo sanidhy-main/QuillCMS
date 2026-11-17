@@ -10,14 +10,24 @@ public class PostResponseDTO {
     public long getId() {
             return this.id;
     }
+
     public String getBody() {
             return this.body;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setBody(String body) {
             this.body = body;
     }
+
     public int getLikes() {
             return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 }
