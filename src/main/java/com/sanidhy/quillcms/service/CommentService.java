@@ -1,45 +1,79 @@
 package com.sanidhy.quillcms.service;
 
+import com.sanidhy.quillcms.exception.AlreadyLikedException;
 import org.springframework.stereotype.Service;
 import com.sanidhy.quillcms.entity.Comment;
 import com.sanidhy.quillcms.repository.CommentRepository;
 import com.sanidhy.quillcms.entity.Post;
 import com.sanidhy.quillcms.entity.User;
 import org.springframework.transaction.annotation.Transactional;
+import com.sanidhy.quillcms.mapper.CommentMapper;
+import com.sanidhy.quillcms.dto.comment.CreateCommentDTO;
+import com.sanidhy.quillcms.dto.comment.CommentResponseDTO;
+import com.sanidhy.quillcms.exception.CommentNotFoundException;
+import com.sanidhy.quillcms.dto.comment.UpdateCommentDTO;
 
 @Service
+@Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
-    public CommentService(CommentRepository commentRepository) {
+    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
+        this.commentMapper = commentMapper;
     }
 
-    public void commentOnPost(Post post, String body) {
-        Comment comment = new Comment();
-        comment.setBody(body);
+    public CommentResponseDTO commentOnPost(Post post, User user, CreateCommentDTO dto) {
+        Comment comment = commentMapper.toEntity(dto);
         comment.setPost(post);
+        comment.setUser(user);
 
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+        return commentMapper.toResponseDTO(savedComment);
     }
 
-    public void replyToComment(long commentID, String body) {
-        Comment comment = new Comment();
-        comment.setBody(body);
+    public CommentResponseDTO replyToComment(long commentID, User user, CreateCommentDTO dto) {
+        Comment parentComment = commentRepository.findById(commentID)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        Comment parentComment = commentRepository.findById(commentID).orElseThrow();
+        Comment comment = commentMapper.toEntity(dto);
         comment.setParentComment(parentComment);
         comment.setPost(parentComment.getPost());
+        comment.setUser(user);
 
+        Comment savedComment = commentRepository.save(comment);
+
+        return commentMapper.toResponseDTO(savedComment);
+    }
+
+    public CommentResponseDTO editComment(long commentId, UpdateCommentDTO dto) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        commentMapper.updateEntity(comment, dto);
+
+        Comment updatedComment = commentRepository.save(comment);
+
+        return commentMapper.toResponseDTO(updatedComment);
+    }
+
+    public void likeComment(long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        if (comment.getLikes().contains(user)) {
+            throw new AlreadyLikedException("Comment already liked");
+        }
+
+        comment.getLikes().add(user);
         commentRepository.save(comment);
     }
 
-    @Transactional
-    public void likeComment(Comment comment, User user) {
-        if (!comment.getLikes().contains(user)) {
-            comment.getLikes().add(user);
-        }
+    public void deleteComment(long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        commentRepository.save(comment);
+        commentRepository.delete(comment);
     }
 }

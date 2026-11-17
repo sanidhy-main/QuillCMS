@@ -3,50 +3,70 @@ package com.sanidhy.quillcms.service;
 import com.sanidhy.quillcms.entity.User;
 import com.sanidhy.quillcms.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.sanidhy.quillcms.mapper.UserMapper;
+import com.sanidhy.quillcms.dto.user.CreateUserDTO;
+import com.sanidhy.quillcms.dto.user.UserResponseDTO;
+import com.sanidhy.quillcms.exception.UsernameAlreadyExistsException;
+import com.sanidhy.quillcms.exception.EmailAlreadyExistsException;
+import com.sanidhy.quillcms.exception.UserNotFoundException;
+import com.sanidhy.quillcms.dto.user.UpdateUserDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public void createUser(String name, String bio, String email, String mobile, int year, int month, int day) {
-        User user = new User();
-        user.setUsername(name);
-        user.setBio(bio);
-        user.setEmail(email);
-        user.setMobile(mobile);
-        user.setDOB(year, month, day);
+    public UserResponseDTO createUser(CreateUserDTO dto) {
+        if (userRepository.existsByUsername(dto.getUsername())) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
 
-        userRepository.save(user);
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+
+        // Hash password before saving (implement during Security)
+
+        User user = userMapper.toEntity(dto);
+        User savedUser = userRepository.save(user);
+        return userMapper.toResponseDTO(savedUser);
     }
 
-    public void editUsername(User user, String name) {
-        //Verify if username is available, and follows rules
-        user.setUsername(name);
-        userRepository.save(user);
+    public UserResponseDTO getUserById(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return userMapper.toResponseDTO(user);
     }
 
-    public void editBio(User user, String bio) {
-        //Verify if bio follows the rules
-        user.setBio(bio);
-        userRepository.save(user);
-    }
+    public UserResponseDTO updateUser(long id, UpdateUserDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-    public void editEmail(User user, String email) {
-        //Verify if email follows the rules
-        user.setEmail(email);
-        //Verify with otp
-        userRepository.save(user);
-    }
+        if (dto.getUsername() != null &&
+                !dto.getUsername().equals(user.getUsername()) &&
+                userRepository.existsByUsername(dto.getUsername())) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
 
-    public void editMobile(User user, String mobile) {
-        //Verify if mobile number follows the rules
-        user.setMobile(mobile);
-        //Verify with otp
-        userRepository.save(user);
+        if (dto.getEmail() != null &&
+                !dto.getEmail().equals(user.getEmail()) &&
+                userRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+
+        userMapper.updateEntity(user, dto);
+
+        User updatedUser = userRepository.save(user);
+
+        return userMapper.toResponseDTO(updatedUser);
     }
 
     public void followUser(User follower, User following) {
