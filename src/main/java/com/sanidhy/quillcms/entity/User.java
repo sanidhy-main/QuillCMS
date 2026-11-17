@@ -12,6 +12,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import java.util.Set;
 import java.util.HashSet;
+import org.hibernate.proxy.HibernateProxy;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -116,5 +118,32 @@ public class User {
 
     public boolean getIsAdmin() {
         return this.isAdmin;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClassWithoutInitializingProxy(this)
+                != getClassWithoutInitializingProxy(obj)) {
+            return false;
+        }
+
+        User user = (User) obj;
+
+        return id != 0 && id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClassWithoutInitializingProxy(this).hashCode();
+    }
+
+    private static Class<?> getClassWithoutInitializingProxy(Object obj) {
+        return obj instanceof HibernateProxy
+                ? ((HibernateProxy) obj).getHibernateLazyInitializer().getPersistentClass()
+                : obj.getClass();
     }
 }
