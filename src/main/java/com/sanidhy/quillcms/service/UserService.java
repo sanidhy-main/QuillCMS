@@ -11,6 +11,7 @@ import com.sanidhy.quillcms.exception.EmailAlreadyExistsException;
 import com.sanidhy.quillcms.exception.UserNotFoundException;
 import com.sanidhy.quillcms.dto.user.UpdateUserDTO;
 import org.springframework.transaction.annotation.Transactional;
+import com.sanidhy.quillcms.exception.AlreadyFollowingException;
 
 @Service
 @Transactional
@@ -77,12 +78,46 @@ public class UserService {
     }
 
     public void followUser(User follower, User following) {
+        if (follower.getFollowingSet().contains(following)) {
+            throw new AlreadyFollowingException("Already following this user");
+        }
+
+        if (follower.equals(following)) {
+            throw new InvalidUserDataException("Cannot follow yourself");
+        }
+
         follower.getFollowingSet().add(following);
         userRepository.save(follower);
     }
 
+    public void unfollowUser(User follower, User following) {
+        if (!follower.getFollowingSet().contains(following)) {
+            throw new NotFollowingException("Not following this user");
+        }
+
+        follower.getFollowingSet().remove(following);
+        userRepository.save(follower);
+    }
+
     public void blockUser(User blocker, User blocking) {
+        if (blocker.getBlockingSet().contains(blocking)) {
+            throw new AlreadyBlockedException("Already blocking this user");
+        }
+
+        if (blocker.equals(blocking)) {
+            throw new InvalidUserDataException("Cannot block yourself");
+        }
+
         blocker.getBlockingSet().add(blocking);
+        userRepository.save(blocker);
+    }
+
+    public void unblockUser(User blocker, User blocking) {
+        if (!blocker.getBlockingSet().contains(blocking)) {
+            throw new NotBlockedException("Not blocking this user");
+        }
+
+        blocker.getBlockingSet().remove(blocking);
         userRepository.save(blocker);
     }
 }
