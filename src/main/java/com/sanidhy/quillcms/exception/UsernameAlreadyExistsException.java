@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class UsernameAlreadyExistsException extends RuntimeException {
-    public usernameAlreadyExistsException(String message) {
+    public UsernameAlreadyExistsException(String message) {
         super(message);
     }
 }

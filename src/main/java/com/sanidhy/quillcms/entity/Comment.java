@@ -8,10 +8,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "comments")
 public class Comment {
+    public Comment() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -41,7 +47,7 @@ public class Comment {
     }
 
     public long getParentCommentId() {
-        return this.parentComment.id;
+        return this.parentComment == null ? null : this.parentComment.getCommentId();
     }
 
     public User getUser() {
@@ -52,12 +58,12 @@ public class Comment {
         return this.post;
     }
 
-    public long getUserId() {
-        return this.getUser().getId();
+    public Long getUserId() {
+        return this.user == null ? null : this.user.getId();
     }
 
-    public long getPostId() {
-        return this.getPost().getId();
+    public Long getPostId() {
+        return this.post == null ? null : this.post.getId();
     }
 
     public String getBody() {

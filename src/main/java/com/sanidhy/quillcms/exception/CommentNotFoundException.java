@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class CommentNotFoundException extends RuntimeException {
-    public commentNotFoundException(String message) {
+    public CommentNotFoundException(String message) {
         super(message);
     }
 }

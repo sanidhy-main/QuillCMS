@@ -1,10 +1,12 @@
 package com.sanidhy.quillcms.mapper;
 
+import org.springframework.stereotype.Component;
 import com.sanidhy.quillcms.entity.Post;
 import com.sanidhy.quillcms.dto.post.CreatePostDTO;
 import com.sanidhy.quillcms.dto.post.UpdatePostDTO;
 import com.sanidhy.quillcms.dto.post.PostResponseDTO;
 
+@Component
 public class PostMapper {
     public Post toEntity(CreatePostDTO dto) {
         Post post = new Post();

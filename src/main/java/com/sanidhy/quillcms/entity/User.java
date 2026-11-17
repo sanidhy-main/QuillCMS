@@ -39,9 +39,12 @@ public class User {
     @Column(name = "mobile_number")
     private String mobileNumber;
 
+    @Column(name = "hashed_password")
+    private String hashedPassword;
+
     @ManyToMany
     @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
-    private Set<User> followingSet = new HashSet()<>;
+    private Set<User> followingSet = new HashSet<>();
 
     public Set<User> getFollowingSet() {
         return this.followingSet;
@@ -49,7 +52,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "blocks", joinColumns = @JoinColumn(name = "blocker_id"), inverseJoinColumns = @JoinColumn(name = "blocked_id"))
-    private Set<User> blockedSet = new HashSet()<>;
+    private Set<User> blockedSet = new HashSet<>();
 
     public Set<User> getBlockingSet() {
         return this.blockedSet;
@@ -71,12 +74,20 @@ public class User {
         this.dob = LocalDate.of(year, month, day);
     }
 
+    public void setDOB(LocalDate dob) {
+        this.dob = dob;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
     public void setMobile(String mobile) {
         this.mobileNumber = mobile;
+    }
+
+    public void setHashedPassword (String hashed) {
+        this.hashedPassword = hashed;
     }
 
     public long getId() {

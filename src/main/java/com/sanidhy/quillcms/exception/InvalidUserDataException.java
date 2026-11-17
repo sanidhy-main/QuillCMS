@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class InvalidUserDataException extends RuntimeException {
-    public invalidUserDataException(String message) {
+    public InvalidUserDataException(String message) {
         super(message);
     }
 }

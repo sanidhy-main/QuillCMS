@@ -1,12 +1,16 @@
 package com.sanidhy.quillcms.service;
 
+import org.springframework.stereotype.Service;
 import com.sanidhy.quillcms.entity.Post;
 import com.sanidhy.quillcms.repository.PostRepository;
+import com.sanidhy.quillcms.entity.User;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class PostService {
     private final PostRepository postRepository;
 
-    PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
@@ -27,9 +31,12 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional
     public void likePost(Post post, User user) {
         if (!post.getLikes().contains(user)) {
             post.getLikes().add(user);
         }
+
+        postRepository.save(post);
     }
 }

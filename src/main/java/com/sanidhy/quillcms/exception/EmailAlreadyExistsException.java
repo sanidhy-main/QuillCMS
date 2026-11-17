@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class EmailAlreadyExistsException extends RuntimeException {
-    public emailAlreadyExistsException(String message) {
+    public EmailAlreadyExistsException(String message) {
         super(message);
     }
 }

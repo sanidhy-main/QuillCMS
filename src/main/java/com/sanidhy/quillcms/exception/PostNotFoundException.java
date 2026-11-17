@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class PostNotFoundException extends RuntimeException {
-    public postNotFoundException(String message) {
+    public PostNotFoundException(String message) {
         super(message);
     }
 }

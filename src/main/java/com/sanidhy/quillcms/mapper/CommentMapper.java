@@ -1,10 +1,12 @@
 package com.sanidhy.quillcms.mapper;
 
+import org.springframework.stereotype.Component;
 import com.sanidhy.quillcms.entity.Comment;
 import com.sanidhy.quillcms.dto.comment.CreateCommentDTO;
 import com.sanidhy.quillcms.dto.comment.UpdateCommentDTO;
 import com.sanidhy.quillcms.dto.comment.CommentResponseDTO;
 
+@Component
 public class CommentMapper {
     public Comment toEntity(CreateCommentDTO dto) {
         Comment comment = new Comment();

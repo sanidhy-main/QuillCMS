@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class UserNotFoundException extends RuntimeException {
-    public userNotFoundException(String message) {
+    public UserNotFoundException(String message) {
         super(message);
     }
 }

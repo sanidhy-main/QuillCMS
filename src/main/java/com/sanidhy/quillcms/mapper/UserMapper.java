@@ -1,10 +1,12 @@
 package com.sanidhy.quillcms.mapper;
 
+import org.springframework.stereotype.Component;
 import com.sanidhy.quillcms.entity.User;
 import com.sanidhy.quillcms.dto.user.CreateUserDTO;
 import com.sanidhy.quillcms.dto.user.UpdateUserDTO;
 import com.sanidhy.quillcms.dto.user.UserResponseDTO;
 
+@Component
 public class UserMapper {
     public User toEntity(CreateUserDTO dto) {
         User user = new User();

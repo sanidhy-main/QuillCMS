@@ -11,8 +11,8 @@ public class UserResponseDTO {
     private LocalDate dob;
     private String email;
     private String mobileNumber;
-    private Set<UserResponseDTO> followingSet = new HashSet()<>;
-    private Set<UserResponseDTO> blockedSet = new HashSet()<>;
+    private Set<UserResponseDTO> followingSet = new HashSet<>();
+    private Set<UserResponseDTO> blockedSet = new HashSet<>();
 
     public void setId(long id) {
         this.id = id;

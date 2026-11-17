@@ -25,7 +25,7 @@ public class CommentResponseDTO {
     public void setCommentId(long id) {
         this.id = id;
     }
-    public int setLikes() {
+    public void setLikes(int likes) {
         this.likes = likes;
     }
 }

@@ -1,7 +1,7 @@
 package com.sanidhy.quillcms.exception;
 
 public class AlreadyFollowingException extends RuntimeException {
-    public alreadyFollowingException(String message) {
+    public AlreadyFollowingException(String message) {
         super(message);
     }
 }
