@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.hibernate.proxy.HibernateProxy;
 import java.util.Objects;
+import com.sanidhy.quillcms.exception.UserNotFoundException;
 
 @Entity
 @Table(name = "users")

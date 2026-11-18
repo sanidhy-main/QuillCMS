@@ -85,7 +85,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
-        List<Comment> comments = commentRepository.findByPost_PostId(id);
+        List<Comment> comments = commentRepository.findByPost_Id(id);
 
         for (Comment comment : comments) {
             if (comment.getParentCommentId() == null) {

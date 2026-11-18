@@ -89,7 +89,7 @@ public class UserService {
 
     public void deleteUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         List<Post> likedPosts = postRepository.findByLikesContaining(user);
         for (Post post : likedPosts) {
