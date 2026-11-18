@@ -20,6 +20,7 @@ import com.sanidhy.quillcms.entity.Post;
 import com.sanidhy.quillcms.entity.Comment;
 import com.sanidhy.quillcms.repository.PostRepository;
 import com.sanidhy.quillcms.repository.CommentRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 @Service
@@ -31,6 +32,7 @@ public class UserService {
     private final CommentRepository commentRepository;
     private final PostService postService;
     private final CommentService commentService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, UserMapper userMapper, PostRepository postRepository, CommentRepository commentRepository, PostService postService, CommentService commentService) {
         this.userRepository = userRepository;
@@ -39,6 +41,7 @@ public class UserService {
         this.commentRepository = commentRepository;
         this.postService = postService;
         this.commentService = commentService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponseDTO createUser(CreateUserDTO dto) {
@@ -50,9 +53,10 @@ public class UserService {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
-        // Hash password before saving (implement during Security)
-
         User user = userMapper.toEntity(dto);
+
+        user.setHashedPassword(passwordEncoder.encode(dto.getPassword()));
+
         User savedUser = userRepository.save(user);
         return userMapper.toResponseDTO(savedUser);
     }
