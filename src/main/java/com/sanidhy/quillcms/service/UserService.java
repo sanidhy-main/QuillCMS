@@ -113,7 +113,11 @@ public class UserService {
         }
 
         blocker.getBlockingSet().add(blocking);
+        blocker.getFollowingSet().remove(blocking);
+        blocking.getFollowingSet().remove(blocker);
+
         userRepository.save(blocker);
+        userRepository.save(blocking);
     }
 
     public void unblockUser(User blocker, User blocking) {
