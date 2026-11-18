@@ -54,7 +54,7 @@ class UserServiceTest {
         dto.setBio("Registration test");
         dto.setMobile("9876543210");
         dto.setDOB(2000, 1, 1);
-        // After adding password support, set the raw password here.
+        dto.setPassword("random123");
         var result = userService.createUser(dto);
         User saved = userRepository.findById(result.getId()).orElseThrow();
         assertEquals(dto.getUsername(), result.getUsername());
