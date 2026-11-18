@@ -13,6 +13,7 @@ import com.sanidhy.quillcms.dto.comment.CommentResponseDTO;
 import com.sanidhy.quillcms.exception.CommentNotFoundException;
 import com.sanidhy.quillcms.dto.comment.UpdateCommentDTO;
 import java.util.List;
+import com.sanidhy.quillcms.exception.NotLikedException;
 
 @Service
 @Transactional
@@ -71,11 +72,23 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    public void unlikeComment(long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        if (!comment.getLikes().contains(user)) {
+            throw new NotLikedException("Comment not liked");
+        }
+
+        comment.getLikes().remove(user);
+        commentRepository.save(comment);
+    }
+
     public void deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
-        commentRepository.delete(comment);
+        deleteCommentTree(comment);
     }
 
     public void deleteCommentTree(Comment comment) {
