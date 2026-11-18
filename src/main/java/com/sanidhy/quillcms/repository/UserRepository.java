@@ -4,6 +4,8 @@ import com.sanidhy.quillcms.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findByFollowingSetContaining(User user);
+    List<User> findByBlockedSetContaining(User user);
     //save(user)
     //saveAll(users)
     //saveAndFlush(user)

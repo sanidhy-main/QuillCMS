@@ -46,7 +46,7 @@ public class Comment {
         return this.id;
     }
 
-    public long getParentCommentId() {
+    public Long getParentCommentId() {
         return this.parentComment == null ? null : this.parentComment.getCommentId();
     }
 

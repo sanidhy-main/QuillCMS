@@ -16,16 +16,29 @@ import com.sanidhy.quillcms.exception.InvalidUserDataException;
 import com.sanidhy.quillcms.exception.NotFollowingException;
 import com.sanidhy.quillcms.exception.AlreadyBlockedException;
 import com.sanidhy.quillcms.exception.NotBlockedException;
+import com.sanidhy.quillcms.entity.Post;
+import com.sanidhy.quillcms.entity.Comment;
+import com.sanidhy.quillcms.repository.PostRepository;
+import com.sanidhy.quillcms.repository.CommentRepository;
+import java.util.List;
 
 @Service
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final PostService postService;
+    private final CommentService commentService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PostRepository postRepository, CommentRepository commentRepository, PostService postService, CommentService commentService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+        this.postService = postService;
+        this.commentService = commentService;
     }
 
     public UserResponseDTO createUser(CreateUserDTO dto) {
@@ -76,7 +89,40 @@ public class UserService {
 
     public void deleteUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Post> likedPosts = postRepository.findByLikesContaining(user);
+        for (Post post : likedPosts) {
+            post.getLikes().remove(user);
+        }
+
+        List<Comment> likedComments = commentRepository.findByLikesContaining(user);
+        for (Comment comment : likedComments) {
+            comment.getLikes().remove(user);
+        }
+
+        List<Comment> authoredComments = commentRepository.findByUser_Id(id);
+        for (Comment comment : authoredComments) {
+            commentService.deleteCommentTree(comment);
+        }
+
+        List<Post> authoredPosts = postRepository.findByUser_Id(id);
+        for (Post post : authoredPosts) {
+            postService.deletePost(post.getId());
+        }
+
+        List<User> followers = userRepository.findByFollowingSetContaining(user);
+        for (User follower : followers) {
+            follower.getFollowingSet().remove(user);
+        }
+
+        List<User> blockers = userRepository.findByBlockedSetContaining(user);
+        for (User blocker : blockers) {
+            blocker.getBlockingSet().remove(user);
+        }
+
+        user.getFollowingSet().clear();
+        user.getBlockingSet().clear();
 
         userRepository.delete(user);
     }

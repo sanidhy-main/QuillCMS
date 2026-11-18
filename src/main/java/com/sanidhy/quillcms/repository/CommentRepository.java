@@ -7,6 +7,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPost_PostId(long postId);
     List<Comment> findByParentComment_Id(long parentCommentId);
+    List<Comment> findByUser_Id(long userId);
+    List<Comment> findByLikesContaining(User user);
     //save(comment)
     //saveAll(comments)
     //saveAndFlush(comment)
