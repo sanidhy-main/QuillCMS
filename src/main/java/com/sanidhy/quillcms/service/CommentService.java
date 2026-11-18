@@ -12,6 +12,7 @@ import com.sanidhy.quillcms.dto.comment.CreateCommentDTO;
 import com.sanidhy.quillcms.dto.comment.CommentResponseDTO;
 import com.sanidhy.quillcms.exception.CommentNotFoundException;
 import com.sanidhy.quillcms.dto.comment.UpdateCommentDTO;
+import java.util.List;
 
 @Service
 @Transactional
@@ -74,6 +75,18 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
+        commentRepository.delete(comment);
+    }
+
+    public void deleteCommentTree(Comment comment) {
+        List<Comment> replies =
+                commentRepository.findByParentComment_Id(comment.getCommentId());
+
+        for (Comment reply : replies) {
+            deleteCommentTree(reply);
+        }
+
+        comment.getLikes().clear();
         commentRepository.delete(comment);
     }
 }

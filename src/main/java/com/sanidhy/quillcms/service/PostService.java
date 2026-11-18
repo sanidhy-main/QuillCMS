@@ -11,15 +11,21 @@ import com.sanidhy.quillcms.dto.post.PostResponseDTO;
 import com.sanidhy.quillcms.dto.post.UpdatePostDTO;
 import com.sanidhy.quillcms.exception.PostNotFoundException;
 import com.sanidhy.quillcms.exception.AlreadyLikedException;
+import com.sanidhy.quillcms.exception.NotLikedException;
+import java.util.List;
+import com.sanidhy.quillcms.entity.Comment;
 
 @Service
 @Transactional
 public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
-    public PostService(PostRepository postRepository, PostMapper postMapper) {
+    public PostService(PostRepository postRepository, CommentRepository commentRepository, PostMapper postMapper) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.postMapper = postMapper;
     }
 
@@ -54,9 +60,38 @@ public class PostService {
         postRepository.save(post);
     }
 
+    public void unlikePost(long postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found"));
+
+        if (!post.getLikes().contains(user)) {
+            throw new NotLikedException("Post not liked");
+        }
+
+        post.getLikes().remove(user);
+        postRepository.save(post);
+    }
+
+    public PostResponseDTO getPostById(long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post not found"));
+
+        return postMapper.toResponseDTO(post);
+    }
+
     public void deletePost(long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
+
+        List<Comment> comments = commentRepository.findByPost_PostId(id);
+
+        for (Comment comment : comments) {
+            if (comment.getParentCommentId() == null) {
+                commentService.deleteCommentTree(comment);
+            }
+        }
+
+        post.getLikes().clear();
 
         postRepository.delete(post);
     }
