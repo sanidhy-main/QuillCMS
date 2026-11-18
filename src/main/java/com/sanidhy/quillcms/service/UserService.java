@@ -34,7 +34,7 @@ public class UserService {
     private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PostRepository postRepository, CommentRepository commentRepository, PostService postService, CommentService commentService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PostRepository postRepository, CommentRepository commentRepository, PostService postService, CommentService commentService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.postRepository = postRepository;
