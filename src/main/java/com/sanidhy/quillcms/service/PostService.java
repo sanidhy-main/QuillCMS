@@ -14,6 +14,7 @@ import com.sanidhy.quillcms.exception.AlreadyLikedException;
 import com.sanidhy.quillcms.exception.NotLikedException;
 import java.util.List;
 import com.sanidhy.quillcms.entity.Comment;
+import com.sanidhy.quillcms.repository.CommentRepository;
 
 @Service
 @Transactional
@@ -23,10 +24,11 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final CommentService commentService;
 
-    public PostService(PostRepository postRepository, CommentRepository commentRepository, PostMapper postMapper) {
+    public PostService(PostRepository postRepository, CommentRepository commentRepository, PostMapper postMapper, CommentService commentService) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.postMapper = postMapper;
+        this.commentService = commentService;
     }
 
     public PostResponseDTO createPost(User user, CreatePostDTO dto) {
