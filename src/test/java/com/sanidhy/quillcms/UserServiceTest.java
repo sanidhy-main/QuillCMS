@@ -47,7 +47,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled("Enable after CreateUserDTO and UserService implement password hashing; the uploaded project currently saves hashed_password as null.")
     void createUserPersistsUserAndReturnsResponse() {
         CreateUserDTO dto = new CreateUserDTO();
         dto.setUsername("registration_test_user");
